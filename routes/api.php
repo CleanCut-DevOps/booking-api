@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TypeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+// Types of property
+Route::get('/types', [TypeController::class, 'index']);
+Route::get('/types/{id}', [TypeController::class, 'show']);
 
 // Catch-all route
 Route::fallback(function () {
