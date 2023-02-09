@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 // Bookings
 Route::get('/bookings', [BookingController::class, 'index']);
+Route::post('/bookings', [BookingController::class, 'store']);
 Route::get('/bookings/{id}', [BookingController::class, 'indexByProperty']);
 
 // Types of property
