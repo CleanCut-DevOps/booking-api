@@ -30,6 +30,7 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'account_api' => env('ACCOUNT_API', 'http://localhost:8001'),
     'property_api' => env('PROPERTY_API', 'http://localhost:8002')
 
 ];
