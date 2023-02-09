@@ -25,10 +25,7 @@ Route::get('/bookings/{id}', [BookingController::class, 'indexByProperty']);
 Route::get('/types', [TypeController::class, 'index']);
 Route::get('/types/{id}', [TypeController::class, 'show']);
 
-// Catch-all route
-Route::fallback(function () {
-    return response()->json([
-        "type" => "Not found",
-        "message" => "There's nothing here.."
-    ], 404);
-});
+// Booking
+Route::get('/{id}', [BookingController::class, 'show']);
+Route::put('/{id}', [BookingController::class, 'update']);
+Route::delete('/{id}', [BookingController::class, 'destroy']);

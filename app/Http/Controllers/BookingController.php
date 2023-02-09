@@ -30,7 +30,7 @@ class BookingController extends Controller
             'additional_information' => ['nullable', 'string'],
             'services' => ['array', 'min:1'],
             'services.*.id' => ['required_with:services', Rule::exists('service_types', 'id')],
-            'services.*.quantity' => ['required_with:services', 'numeric', 'integer']
+            'services.*.quantity' => ['required_with:services', 'numeric', 'integer', 'min:1']
         ], [
             'property_id.required' => 'Property ID field is required',
             'property_id.string' => 'The property ID must be a string',
@@ -47,7 +47,32 @@ class BookingController extends Controller
             'services.*.id.exists' => 'The service ID must exist',
             'services.*.quantity.required_with' => 'A service quantity is required',
             'services.*.quantity.numeric' => 'The service quantity must be a number',
-            'services.*.quantity.integer' => 'The service quantity must be an integer'
+            'services.*.quantity.integer' => 'The service quantity must be an integer',
+            'services.*.quantity.min' => 'The service quantity must be at least 1'
+        ]);
+
+        $this->validate('update', [
+            'start_time' => ['date'],
+            'end_time' => ['date'],
+            'secondary_contact' => ['nullable', 'string', 'max:255'],
+            'additional_information' => ['nullable', 'string'],
+            'services' => ['array', 'min:1'],
+            'services.*.id' => ['required_with:services', Rule::exists('service_types', 'id')],
+            'services.*.quantity' => ['nullable', 'numeric', 'integer', 'min:1']
+        ], [
+            'start_time.date' => 'The start time must be a date',
+            'end_time.date' => 'The end time must be a date',
+            'secondary_contact.string' => 'The secondary contact must be a string',
+            'secondary_contact.max' => 'The secondary contact must be less than 255 characters',
+            'additional_information.string' => 'The additional information must be a string',
+            'services.array' => 'The services field is invalid',
+            'services.min' => 'The services field must contain at least one service',
+            'services.*.id.required_with' => 'A service ID is required',
+            'services.*.id.exists' => 'The service ID must exist',
+            'services.*.quantity.required_with' => 'A service quantity is required',
+            'services.*.quantity.numeric' => 'The service quantity must be a number',
+            'services.*.quantity.integer' => 'The service quantity must be an integer',
+            'services.*.quantity.min' => 'The service quantity must be at least 1'
         ]);
     }
 
@@ -103,6 +128,28 @@ class BookingController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        if ($request->has('services')) {
+            $errors = [];
+
+            foreach (request('services') as $service) {
+                $serviceTypeID = $service['id'];
+
+                if (!ServiceType::whereId($serviceTypeID)->first()->available) {
+                    $index = array_search($service, request('services'));
+
+                    $errors["services.$index.id"] = "The service type $serviceTypeID is not available.";
+                }
+            }
+
+            if (count($errors) > 0) {
+                return response()->json([
+                    'type' => 'Invalid data',
+                    'message' => 'Some service type(s) are invalid.',
+                    'errors' => $errors
+                ], 400);
+            }
+        }
+
         $token = JWTAuth::getToken()->get();
         $property_api = config('services.property_api');
         $propertyID = request('property_id');
@@ -141,6 +188,117 @@ class BookingController extends Controller
             'type' => 'Successful request',
             'message' => 'Booking created successfully',
             'booking' => $booking->refresh()
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function show(string $id): JsonResponse
+    {
+        $booking = Booking::whereId($id)->first();
+
+        return response()->json([
+            'type' => 'Successful request',
+            'message' => 'Booking retrieved successfully',
+            'booking' => $booking
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function update(Request $request, string $id): JsonResponse
+    {
+        $booking = Booking::whereId($id)->first();
+
+        if ($request->has('services')) {
+            $errors = [];
+
+            foreach (request('services') as $service) {
+                $serviceTypeID = $service['id'];
+
+                if (!ServiceType::whereId($serviceTypeID)->first()->available) {
+                    $index = array_search($service, request('services'));
+
+                    $errors["services.$index.id"] = "The service type $serviceTypeID is not available.";
+                }
+            }
+
+            if (count($errors) > 0) {
+                return response()->json([
+                    'type' => 'Invalid data',
+                    'message' => 'Some service type(s) are invalid.',
+                    'errors' => $errors
+                ], 400);
+            }
+
+            foreach (request('services') as $service) {
+                $serviceType = ServiceType::whereId($service['id'])->first();
+                $requestedService = Services::whereBookingId($booking->id)->whereTypeId($serviceType->id);
+
+
+                if ($service['quantity']) {
+                    if ($requestedService->exists()) {
+                        // Updates
+
+                        if ($serviceType->quantifiable) {
+                            $requestedService->update(['quantity' => $service['quantity']]);
+                        } else {
+                            $requestedService->update(['quantity' => 1]);
+                        }
+                    } else {
+                        // Creates
+
+                        if ($serviceType->quantifiable) {
+                            Services::create([
+                                'type_id' => $service['id'],
+                                'booking_id' => $booking->id,
+                                'quantity' => $service['quantity']
+                            ]);
+                        } else {
+                            Services::create([
+                                'quantity' => 1,
+                                'type_id' => $service['id'],
+                                'booking_id' => $booking->id
+                            ]);
+                        }
+                    }
+                } else {
+                    if ($requestedService->exists()) $requestedService->delete();
+                }
+            }
+        }
+
+        $booking->update($request->only(['start_time', 'end_time', 'secondary_contact', 'additional_information']));
+
+        return response()->json([
+            'type' => 'Successful request',
+            'message' => 'Booking updated successfully',
+            'booking' => $booking->refresh()
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function destroy(string $id): JsonResponse
+    {
+        Booking::whereId($id)->first()->delete();
+
+        return response()->json([
+            'type' => 'Successful request',
+            'message' => 'Booking deleted successfully'
         ]);
     }
 
