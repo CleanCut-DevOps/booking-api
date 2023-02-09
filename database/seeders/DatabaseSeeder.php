@@ -23,18 +23,18 @@ class DatabaseSeeder extends Seeder
                     'label' => 'Bed Set — Double / Queen / King',
                     'price' => 17.5
                 ])->quantifiable()
-                    ->has(ServiceTypeProducts::factory(['label' => 'Triple Sheets']))
-                    ->has(ServiceTypeProducts::factory(['label' => '4x Pillowcases']))
-                    ->has(ServiceTypeProducts::factory(['label' => '2x Bath Towels']))
+                    ->has(ServiceTypeProducts::factory(['label' => 'Sheets', 'quantity' => 3]))
+                    ->has(ServiceTypeProducts::factory(['label' => 'Pillowcases', 'quantity' => 4]))
+                    ->has(ServiceTypeProducts::factory(['label' => 'Bath Towels', 'quantity' => 2]))
             )
             ->has(
                 ServiceType::factory([
                     'label' => 'Bed Set — Single',
                     'price' => 10
                 ])->quantifiable()
-                    ->has(ServiceTypeProducts::factory(['label' => 'Triple Sheets']))
-                    ->has(ServiceTypeProducts::factory(['label' => '2x Pillowcases']))
-                    ->has(ServiceTypeProducts::factory(['label' => '1x Bath Towel']))
+                    ->has(ServiceTypeProducts::factory(['label' => 'Sheets', 'quantity' => 3]))
+                    ->has(ServiceTypeProducts::factory(['label' => 'Pillowcases', 'quantity' => 2]))
+                    ->has(ServiceTypeProducts::factory(['label' => 'Bath Towels', 'quantity' => 1]))
             )
             ->create();
 

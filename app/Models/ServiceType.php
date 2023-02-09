@@ -66,9 +66,8 @@ class ServiceType extends Model
         'label',
         'price',
         'available',
-        'category_id',
         'quantifiable',
-        'detailed_description'
+        'type_category_id',
     ];
 
     /**

@@ -55,7 +55,7 @@ class ServiceTypeProducts extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = ['service_type_id'];
+    protected $hidden = ['id', 'service_type_id'];
 
     /**
      * Get the product's service type.
