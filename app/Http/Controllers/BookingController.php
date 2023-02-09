@@ -186,9 +186,8 @@ class BookingController extends Controller
 
         return response()->json([
             'type' => 'Successful request',
-            'message' => 'Booking created successfully',
-            'booking' => $booking->refresh()
-        ]);
+            'message' => 'Booking created successfully'
+        ], 201);
     }
 
     /**
