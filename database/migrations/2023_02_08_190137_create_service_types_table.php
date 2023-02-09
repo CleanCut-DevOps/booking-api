@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->boolean('available');
             $table->timestamps();
 
-            $table->foreign('type_category_id')->references('id')->on('service_type_categories');
+            $table->foreign('type_category_id')->references('id')->on('service_type_categories')->cascadeOnDelete();
         });
     }
 

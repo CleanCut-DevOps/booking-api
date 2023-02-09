@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('label');
             $table->unsignedInteger('quantity')->nullable();
 
-            $table->foreign('service_type_id')->references('id')->on('service_types');
+            $table->foreign('service_type_id')->references('id')->on('service_types')->cascadeOnDelete();
         });
     }
 
