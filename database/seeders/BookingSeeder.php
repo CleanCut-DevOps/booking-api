@@ -41,7 +41,7 @@ class BookingSeeder extends Seeder
 
         $properties = collect($getProps->json()['properties']);
 
-        $serviceTypes = ServiceType::get();
+        $serviceTypes = ServiceType::whereAvailable(true)->get();
 
         foreach ($properties as $property) {
             $startTime = Carbon::now()->addDays(7)->setTime(10, 0)->addDays(7);
@@ -62,7 +62,7 @@ class BookingSeeder extends Seeder
             foreach ($serviceTypes as $serviceType) {
                 $run = fake()->boolean();
 
-                if ($run && $serviceType->available) {
+                if ($run) {
                     Services::factory()->create([
                         'booking_id' => $booking1->id,
                         'type_id' => $serviceType->id,
@@ -74,7 +74,7 @@ class BookingSeeder extends Seeder
             foreach ($serviceTypes as $serviceType) {
                 $run = fake()->boolean();
 
-                if ($run && $serviceType->available) {
+                if ($run) {
                     Services::factory()->create([
                         'booking_id' => $booking2->id,
                         'type_id' => $serviceType->id,
