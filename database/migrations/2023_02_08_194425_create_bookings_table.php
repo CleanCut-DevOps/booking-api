@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('property_id');
-            $table->uuid('cleaner_id');
+            $table->uuid('cleaner_id')->nullable();
             $table->timestamp('start_time');
             $table->timestamp('end_time');
             $table->string('secondary_contact')->nullable();

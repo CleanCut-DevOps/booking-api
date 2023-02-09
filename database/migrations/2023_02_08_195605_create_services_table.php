@@ -18,7 +18,7 @@ return new class extends Migration
             $table->uuid('type_id');
             $table->unsignedInteger('quantity');
 
-            $table->foreign('booking_id')->references('id')->on('bookings');
+            $table->foreign('booking_id')->references('id')->on('bookings')->cascadeOnDelete();
         });
     }
 

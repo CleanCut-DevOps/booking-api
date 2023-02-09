@@ -22,7 +22,6 @@ class BookingFactory extends Factory
 
         return [
             'start_time' => $baseTime,
-            'cleaner_id' => fake()->uuid(),
             'property_id' => fake()->uuid(),
             'end_time' => $baseTime->addHours(5)
         ];
@@ -40,7 +39,7 @@ class BookingFactory extends Factory
     {
         return $this->state(fn(array $attributes) => [
             'cleaner_id' => $cleaner_id,
-            '$property_id' => $property_id,
+            'property_id' => $property_id,
         ]);
     }
 }

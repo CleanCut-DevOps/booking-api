@@ -51,7 +51,7 @@ class ServiceTypeFactory extends Factory
     public function available(bool $bool = true): static
     {
         return $this->state(fn(array $attributes) => [
-            'quantifiable' => $bool,
+            'available' => $bool,
         ]);
     }
 }

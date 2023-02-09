@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
                     'label' => 'Bed Set — Double / Queen / King',
                     'price' => 17.5
                 ])->quantifiable()
+                    ->available()
                     ->has(ServiceTypeProducts::factory(['label' => 'Sheets', 'quantity' => 3]))
                     ->has(ServiceTypeProducts::factory(['label' => 'Pillowcases', 'quantity' => 4]))
                     ->has(ServiceTypeProducts::factory(['label' => 'Bath Towels', 'quantity' => 2]))
@@ -32,6 +33,7 @@ class DatabaseSeeder extends Seeder
                     'label' => 'Bed Set — Single',
                     'price' => 10
                 ])->quantifiable()
+                    ->available()
                     ->has(ServiceTypeProducts::factory(['label' => 'Sheets', 'quantity' => 3]))
                     ->has(ServiceTypeProducts::factory(['label' => 'Pillowcases', 'quantity' => 2]))
                     ->has(ServiceTypeProducts::factory(['label' => 'Bath Towels', 'quantity' => 1]))
@@ -44,6 +46,7 @@ class DatabaseSeeder extends Seeder
                     'label' => 'Shower Set',
                     'price' => 8.5
                 ])->quantifiable()
+                    ->available()
                     ->has(ServiceTypeProducts::factory(['label' => 'Cleansing Shampoo', 'quantity' => 1]))
                     ->has(ServiceTypeProducts::factory(['label' => 'Body Wash', 'quantity' => 1]))
                     ->has(ServiceTypeProducts::factory(['label' => 'Body Lotion', 'quantity' => 1]))
@@ -54,6 +57,7 @@ class DatabaseSeeder extends Seeder
                     'label' => 'Bathroom Set',
                     'price' => 12.5
                 ])->quantifiable()
+                    ->available()
                     ->has(ServiceTypeProducts::factory(['label' => 'Bath Mat', 'quantity' => 1]))
                     ->has(ServiceTypeProducts::factory(['label' => 'Hand Towel', 'quantity' => 1]))
                     ->has(ServiceTypeProducts::factory(['label' => 'Face Washers', 'quantity' => 2]))
@@ -68,6 +72,7 @@ class DatabaseSeeder extends Seeder
                     'label' => 'Kitchen Pack',
                     'price' => 5
                 ])->quantifiable()
+                    ->available()
                     ->has(ServiceTypeProducts::factory(['label' => 'Sponge + Scourer', 'quantity' => 1]))
                     ->has(ServiceTypeProducts::factory(['label' => 'Domestic Wipe', 'quantity' => 1]))
                     ->has(ServiceTypeProducts::factory(['label' => 'Laundry Powder', 'quantity' => 1]))
@@ -80,6 +85,7 @@ class DatabaseSeeder extends Seeder
                     'label' => 'Beverages Pack',
                     'price' => 2.5
                 ])->quantifiable()
+                    ->available()
                     ->has(ServiceTypeProducts::factory(['label' => 'Milk', 'quantity' => 1]))
                     ->has(ServiceTypeProducts::factory(['label' => 'Tea', 'quantity' => 2]))
                     ->has(ServiceTypeProducts::factory(['label' => 'Coffee', 'quantity' => 2]))
@@ -92,6 +98,7 @@ class DatabaseSeeder extends Seeder
                 'label' => 'Deep Clean / Extended Clean',
                 'price' => '50'
             ])->quantifiable(false)
+                ->available()
                 ->has(ServiceTypeProducts::factory(['label' => 'Charged in blocks of 1 hour'])))
             ->create();
     }
