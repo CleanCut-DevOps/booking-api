@@ -23,7 +23,7 @@ class ServicesFactory extends Factory
         return [
             'booking_id' => Booking::factory(),
             'type_id' => ServiceType::factory(),
-            'quantity' => fake()->randomElement([0, 1])
+            'quantity' => 1
         ];
     }
 }
