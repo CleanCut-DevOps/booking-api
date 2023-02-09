@@ -75,7 +75,7 @@ class ServiceType extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = ['category_id'];
+    protected $hidden = ['type_category_id'];
 
     /**
      * The attributes that should be cast.

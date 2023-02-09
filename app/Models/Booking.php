@@ -51,6 +51,8 @@ class Booking extends Model
 {
     use UUID, HasFactory;
 
+    public $appends = ['services'];
+
     public $timestamps = true;
     public $incrementing = false;
 
@@ -104,5 +106,15 @@ class Booking extends Model
     public function services(): HasMany
     {
         return $this->hasMany(Services::class);
+    }
+
+    /**
+     * Get the booking's services.
+     *
+     * @return Collection<int, Services>
+     */
+    public function getServicesAttribute(): Collection
+    {
+        return $this->services()->get();
     }
 }

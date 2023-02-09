@@ -71,20 +71,10 @@ class Services extends Model
     /**
      * Appends the service's type.
      *
-     * @return Model|null
+     * @return array<string, string>|null
      */
-    public function getTypeAttribute(): Model|null
+    public function getTypeAttribute(): array|null
     {
-        return $this->serviceType()->first();
-    }
-
-    /**
-     * Get the service's type.
-     *
-     * @return BelongsTo
-     */
-    public function serviceType(): BelongsTo
-    {
-        return $this->belongsTo(ServiceType::class);
+        return ServiceType::whereId($this->type_id)->first()->only(['id', 'label', 'category', 'products']);
     }
 }
